@@ -1,8 +1,15 @@
-﻿
-# defines search term 
-$SearchTerm = "cfg_proxy_*"
+<#
+.SYNOPSIS
+  Script to show information on AD groups
+.DESCRIPTION
+  Searches for all AD groups meeting search term, then loops through pushing group info into a custom object which can be viewed as table, csv etc
+  Also counts number of members.  
+#>
 
-# searched for AD groups meeting search term 
+# defines search term - use * as a wildcard
+$SearchTerm = "My_ADgroups*"
+
+# searches for AD groups meeting search term 
 $Groups = get-adgroup -Filter * | where {$_.name -like $searchTerm}
 
 # Loops through list gathering data
