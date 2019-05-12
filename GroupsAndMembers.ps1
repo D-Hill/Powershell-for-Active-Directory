@@ -1,5 +1,13 @@
-﻿# defines search term - use * as a wildcard
-$SearchTerm = "cfg_*"
+<#
+.SYNOPSIS
+  Script to show all members of AD groups meeting a specified search term
+.DESCRIPTION
+  Searches for all AD groups meeting search term, then loops through them all and collects names of all members.Also counts number of members
+  Sends results to a custom object that could be exported to table, csv etc.
+#>
+
+# defines search term - use * as a wildcard
+$SearchTerm = "*"
 
 # creates list of groups meeting description
 $Groups = Get-ADGroup -filter * | where {$_.name -like $SearchTerm}
