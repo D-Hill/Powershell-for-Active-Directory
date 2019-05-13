@@ -18,7 +18,7 @@ $Results = foreach ($Group in $Groups) {
    # sets variables
    $Name = $Group.name
    $Description = (get-adgroup $Group -Properties description).description
-   $Samaccountname = $Groups.SamAccountName
+   $Samaccountname = $Group.SamAccountName
    $Count = (Get-ADGroupmember $Group | Measure-Object).count
 
     # creates a custom object containing the data 
