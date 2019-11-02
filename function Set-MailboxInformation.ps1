@@ -10,7 +10,7 @@ function Set-MailboxInformation {
     param(
 
     [parameter(Mandatory=$true)][String]$MailboxName,
-    [String]$Owner,
+    [parameter(Mandatory=$true)]$Owner,
     [string]$Approver1,
     [string]$Approver2,
     [string]$Approver3,
@@ -37,3 +37,5 @@ if ( $Department ) { set-aduser $MailboxName -Department $Department }
 if ( $Description ) { set-aduser $MailboxName -Description $Description }
 
 }
+       
+       
