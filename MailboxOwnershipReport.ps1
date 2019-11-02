@@ -1,3 +1,16 @@
+<#
+.SYNOPSIS
+ If you add Mailbox ownership information to the 'Info' attribute in AD, this can then be viewed in the Notes section of mailbox propererties in Outlool
+ This report searches for this information and outputs to a table.
+.DESCRIPTION
+The formating of the ownership information must be as below: 
+Owner - Tom Jones
+Additional Approvers - Brian Jones, Bob Jones
+
+#>
+
+
+
 
 $MailboxesOU = INSERT OU HERE
 
