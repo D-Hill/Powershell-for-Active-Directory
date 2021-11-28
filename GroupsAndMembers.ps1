@@ -7,37 +7,67 @@
 #>
 
 # defines search term - use * as a wildcard
-$SearchTerm = "*"
+$SearchTerm = "cfg_cognos*"
 
 # creates list of groups meeting description
-$Groups = Get-ADGroup -filter * | where {$_.name -like $SearchTerm}
+$Groups = Get-ADGroup -filter 'name -like $SearchTerm' -Properties description
 
 # Loops through list of groups 
 $Results = foreach ($Group in $Groups) {
 
    # defines variables     
-   $Name = $Group.name
+  
    $GroupMembers = Get-ADGroupmember $Group
    $Count = ($GroupMembers | Measure-Object).count
 
-   # Sets 'name' of group member if group is empty by creating a custom object with a 'name' value of "-"
-    If ($Count -lt 1) { $GroupMembers = [pscustomobject]@{ Name = "-" } }
-  
-       # Gets all group members of listed groups
-       foreach ($GroupMember in $GroupMembers) {
+   # Sets group detail if group is empty
+    If ($Count -eq 0) { 
+    
+                        [pscustomobject]@{ 
+    
+ 
+                                        GroupName = $Group.name
+                                        GroupDescription = $Group.description
+                                        NumberOfMembers = $Count
+                                        MemberName = "-"
+                                        MemberID = "-"                                        
+                                        MemberDept = "-"
+                                        MemberTitle = "-"
+    
+                                        } 
+    
+    }
+    
+    
+    else {     
+    
+            foreach ($GroupMember in $GroupMembers) {
         
-        # defines variable
-        $GroupMemberName = $GroupMember.name
+                                                        $MemberAd = $null
+                                                        $MemberAD = get-aduser $GroupMember.sid -Properties title, department,manager
+
+                                                        $Manager = $null
+                                                        If ($MemberAd.manager)  {   $Manager = (get-aduser $MemberAd.manager -ErrorAction SilentlyContinue).name }
+
         
-        # creates a custom object containing data   
-        [pscustomobject]@{
+                                                         # creates a custom object containing data   
+                                                         [pscustomobject]@{
 
-                GroupName = $Name
-                MemberName = $GroupMemberName
-                NumberOfMembers = $Count  
+                                                                            GroupName = $Group.name
+                                                                            GroupDescription = $Group.description
+                                                                            NumberOfMembers = $Count
+                                                                            MemberName = $GroupMember.name
+                                                                            MemberID = $MemberAd.samaccountname
+                                                                            MemberDept = $MemberAD.Department
+                                                                            MemberTitle = $MemberAD.title
+                                                                            Manager = $Manager
 
-                }
+                                                                                        }
+            
+                                                     }                                                           
+     
             }
+                    
   } 
 
 # outputs the result as a table 
