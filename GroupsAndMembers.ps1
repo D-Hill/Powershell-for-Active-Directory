@@ -7,7 +7,7 @@
 #>
 
 # defines search term - use * as a wildcard
-$SearchTerm = "cfg_cognos*"
+$SearchTerm = "ABC*"
 
 # creates list of groups meeting description
 $Groups = Get-ADGroup -filter 'name -like $SearchTerm' -Properties description
